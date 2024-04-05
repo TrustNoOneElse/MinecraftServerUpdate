@@ -11,3 +11,6 @@ But practical it was only tested with Windows Client and Linux Server.
 You need to create a config.ini from the example one, you can test the connection than with the `TestConnection.py` Script.
 After that you need to start the `Main.py`.
 When i find time to package it, then maybe it's just a executable to be run.
+
+# Interest in use/extensions
+if there is any interest, then please create a issue and i will beautify this project.
