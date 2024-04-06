@@ -25,3 +25,4 @@ class Updater:
                         self.server_accessor.upload(self.client_accessor.get_absolute_path(client_mod), client_mod)
                         # After mod is found we don't need to search further
                         break
+        self.server_accessor.close()
