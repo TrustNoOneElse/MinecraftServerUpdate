@@ -27,8 +27,8 @@ class ServerAccessor:
         return self.connection.sftp()
 
     # upload file or directory
-    def upload(self, local_path: str, remote_path: str):
-        self.sftp_client.put(local_path, remote_path)
+    def upload(self, local_path: str, remote_path: str, callback):
+        self.sftp_client.put(local_path, remote_path, callback=callback)
 
     def read_files(self, path: str = '.'):
         return self.sftp_client.listdir(path)
