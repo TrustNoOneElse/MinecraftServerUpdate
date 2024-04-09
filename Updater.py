@@ -1,3 +1,5 @@
+from datetime import time
+
 from ClientAccessor import ClientAccessor
 from ConfigProvider import ConfigProvider
 from MinecraftModComparator import MinecraftModComparator
@@ -5,7 +7,8 @@ from ServerAccessor import ServerAccessor
 
 
 def print_upload_status(current_bytes: int, total_bytes: int):
-    convert_bytes(current_bytes, total_bytes)
+    if Updater.start_time.second % 5 == 0:
+        convert_bytes(current_bytes, total_bytes)
 
 
 def convert_bytes(current_bytes: int, total_bytes: int):
@@ -19,13 +22,13 @@ def convert_bytes(current_bytes: int, total_bytes: int):
     mb_conversion = 1024 * 1024
     current_mb = current_bytes / mb_conversion
     total_mb = total_bytes / mb_conversion
-    print(f"{current_mb:.2f}/{total_mb:.2f} MB for {current_modname}")
-
-
-current_modname = ""
+    print(f"{current_mb:.2f}/{total_mb:.2f} MB for {Updater.current_modname}")
 
 
 class Updater:
+    current_modname = ""
+    start_time = time()
+
     def __init__(self):
         self.server_accessor = ServerAccessor(ConfigProvider.get_server_property("serverip"),
                                               ConfigProvider.get_server_property("user"),
@@ -44,6 +47,7 @@ class Updater:
                         # TODO could be parallel
                         self.server_accessor.delete(server_mod)
                         Updater.current_modname = client_mod
+                        Updater.start_time = time()
                         self.server_accessor.upload(self.client_accessor.get_absolute_path(client_mod),
                                                     client_mod,
                                                     print_upload_status)
