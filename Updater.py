@@ -1,4 +1,6 @@
-from datetime import time
+import datetime
+from datetime import datetime
+
 
 from ClientAccessor import ClientAccessor
 from ConfigProvider import ConfigProvider
@@ -7,7 +9,8 @@ from ServerAccessor import ServerAccessor
 
 
 def print_upload_status(current_bytes: int, total_bytes: int):
-    if Updater.start_time.second % 5 == 0:
+    Updater.start_time = datetime.now()
+    if Updater.start_time.second % 5 == 0 | current_bytes == total_bytes:
         convert_bytes(current_bytes, total_bytes)
 
 
@@ -27,7 +30,7 @@ def convert_bytes(current_bytes: int, total_bytes: int):
 
 class Updater:
     current_modname = ""
-    start_time = time()
+    start_time = datetime.now()
 
     def __init__(self):
         self.server_accessor = ServerAccessor(ConfigProvider.get_server_property("serverip"),
@@ -47,7 +50,7 @@ class Updater:
                         # TODO could be parallel
                         self.server_accessor.delete(server_mod)
                         Updater.current_modname = client_mod
-                        Updater.start_time = time()
+                        Updater.start_time = datetime.now()
                         self.server_accessor.upload(self.client_accessor.get_absolute_path(client_mod),
                                                     client_mod,
                                                     print_upload_status)
